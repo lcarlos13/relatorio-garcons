@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { jsPDF } from "jspdf";
+
 
 export default function Home() {
   const [relatorio, setRelatorio] = useState([]);
@@ -38,6 +40,48 @@ export default function Home() {
     setLoading(false);
   }
 
+
+  async function gerarPDF() {
+    const doc = new jsPDF();
+
+    doc.setFontSize(18);
+    doc.text("Relatório de Garçons", 20, 20);
+
+    doc.setFontSize(12);
+
+    let y = 40;
+
+    relatorio.forEach((item) => {
+      doc.text(`Garçom: ${item.nome}`, 20, y);
+      y += 8;
+
+      doc.text(`Total: R$ ${item.total.toFixed(2)}`, 20, y);
+      y += 8;
+
+      doc.text(`Comissão: R$ ${item.comissao.toFixed(2)}`, 20, y);
+      y += 12;
+    });
+
+    const pdfBlob = doc.output("blob");
+    const file = new File([pdfBlob], "relatorio-garcons.pdf", {
+      type: "application/pdf",
+    });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({
+        title: "Relatório de Garçons",
+        text: "Segue o relatório em PDF",
+        files: [file],
+      });
+    } else {
+      // Fallback universal
+      const url = URL.createObjectURL(pdfBlob);
+      window.open(url);
+    }
+  }
+
+
+
   return (
     <main className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
       <div className="w-full max-w-md">
@@ -58,6 +102,14 @@ export default function Home() {
         >
           {loading ? "Carregando..." : "Buscar Relatório"}
         </button>
+
+        <button
+          onClick={gerarPDF}
+          className="w-full mt-3 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold shadow-lg active:scale-95 transition duration-200"
+        >
+          Gerar PDF
+        </button>
+
 
         <div className="mt-6 space-y-4">
           {relatorio.map((item) => (
