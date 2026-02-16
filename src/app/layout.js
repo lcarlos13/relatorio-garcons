@@ -1,5 +1,7 @@
 import "./globals.css";
 import OfflineAlert from "./components/OfflineAlert";
+"use client";
+import { useEffect } from "react";
 
 
 export const metadata = {
@@ -15,13 +17,20 @@ export const viewport = {
   themeColor: "#2563eb",
 };
 
+"use client";
+import { useEffect } from "react";
+
 export default function RootLayout({ children }) {
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js");
+    }
+  }, []);
+
   return (
-    <html lang="pt-BR">
-      <body>
-        <OfflineAlert />
-        {children}
-     </body>
+    <html>
+      <body>{children}</body>
     </html>
   );
 }
+
