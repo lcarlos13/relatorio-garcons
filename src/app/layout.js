@@ -17,9 +17,6 @@ export const viewport = {
   themeColor: "#2563eb",
 };
 
-"use client";
-import { useEffect } from "react";
-
 export default function RootLayout({ children }) {
   useEffect(() => {
     if ("serviceWorker" in navigator) {
