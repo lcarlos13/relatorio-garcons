@@ -1,7 +1,6 @@
 import "./globals.css";
 import OfflineAlert from "./components/OfflineAlert";
-"use client";
-import { useEffect } from "react";
+import ServiceWorkerRegister from "./components/ServiceWorkerRegister";
 
 
 export const metadata = {
@@ -18,15 +17,13 @@ export const viewport = {
 };
 
 export default function RootLayout({ children }) {
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js");
-    }
-  }, []);
-
   return (
-    <html>
-      <body>{children}</body>
+    <html lang="pt-BR">
+      <body>
+        <ServiceWorkerRegister />
+        <OfflineAlert />
+        {children}
+      </body>
     </html>
   );
 }
