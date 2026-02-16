@@ -1,4 +1,6 @@
 import "./globals.css";
+import OfflineAlert from "./components/OfflineAlert";
+
 
 export const metadata = {
   title: "Relatório de Garçons",
@@ -16,7 +18,10 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body>
+        <OfflineAlert />
+        {children}
+     </body>
     </html>
   );
 }
